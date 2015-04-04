@@ -7,10 +7,10 @@
       .panel-heading
         |管理している企画一覧
       ul.list-group
-        li.list-group-item
-          span.badge 14
-          a(href="#/projects/85B64BA2-4893-408A-9614-4B562F4CF479")
-            |tkbctf6
+        - for project in @projects
+          li.list-group-item
+            span.badge 14
+            = link_to project[:name], path_to(project)
       .panel-body(style="text-align: center")
         a.btn.btn-primary(href="#/projects/new")
           span.glyphicon.glyphicon-plus

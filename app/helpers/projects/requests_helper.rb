@@ -1,0 +1,2 @@
+module Projects::RequestsHelper
+end

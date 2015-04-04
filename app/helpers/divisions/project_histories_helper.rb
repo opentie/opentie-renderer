@@ -1,0 +1,2 @@
+module Divisions::ProjectHistoriesHelper
+end

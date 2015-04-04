@@ -1,0 +1,2 @@
+module Divisions::RequestSchemataHelper
+end

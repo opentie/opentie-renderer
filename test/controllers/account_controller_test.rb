@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RequestSchemataControllerTest < ActionController::TestCase
+class AccountControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end

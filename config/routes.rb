@@ -6,11 +6,18 @@ Rails.application.routes.draw do
   root 'dashboard#index'
 
   resources :projects do
-    resources :request_shemata, :requests
+    resources :request_shemata, to: 'projects/request_schemata'
+    resources :requests       , to: 'projects/requests'
   end
 
   resources :divisions do
-    resources :request_shemata, :requests, :project_histories, :projects
+    resources :request_shemata  , to: 'divisions/request_schemata' do
+      resources :requests         , to: 'divisions/request_schemata/requests'
+    end
+    resources :project_histories, to: 'divisions/project_histories'
+    resources :projects         , to: 'divisions/projects' do
+      resources :requests         , to: 'divisions/projects/requests'
+    end
   end
 
   # Example of regular route:

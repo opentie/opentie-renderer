@@ -1,4 +1,4 @@
-class Projects::RequestsController < ApplicationController
+class Divisions::Projects::RequestsController < ApplicationController
   def index
     @request_schemata =
       [{

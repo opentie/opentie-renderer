@@ -9,26 +9,52 @@ html
     = javascript_include_tag 'application'
     = csrf_meta_tags
   body
+    - unless @does_not_have_sidebar
+      nav#sidebar.container-fluid
+        h5 企画台帳
+        .row
+          ul.nav.nav-pills.nav-stacked
+            li role="presentation"
+              a href="#" 企画一覧
+            li
+              hr
+            li role="presentation"
+              a href="#" 変更履歴
+        h5 申請台帳
+        .row
+          ul.nav.nav-pills.nav-stacked
+            - for schema in @request_schemata
+              li role="presentation"
+                = link_to schema[:name], path_to(schema)
+
     nav#navbar.navbar.navbar-default.navbar-fixed-top
       .container-fluid
         .navbar-header
-          a.navbar-brand(href="#")
-            img#brand-logo(src= asset_path("logo.svg"))
+          a.navbar-brand href="#"
+            img#brand-logo src=asset_path("logo.svg")
         ul.nav.navbar-nav.navbar-right
-          li.active
-            a(href="#")
-              span.glyphicon.glyphicon-dashboard(aria-hidden="true") ダッシュボード
+          li
+            = link_to "/" do
+              span.glyphicon.glyphicon-dashboard aria-hidden="true" ダッシュボード
           li.dropdown
-            a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-expanded="false")
-              span.glyphicon.glyphicon-user(aria-hidden="true") グループ切り替え
+            a.dropdown-toggle[
+              href="#"
+              data-toggle="dropdown"
+              role="button"
+              aria-expanded="false"]
+              span.glyphicon.glyphicon-user aria-hidden="true" グループ切り替え
               span.caret
-            ul.dropdown-menu(role="menu")
+            ul.dropdown-menu role="menu"
               li
-                a(href="#") なんちゃら
+                a href="#" なんちゃら
               li
-                a(href="#") ほにゃぺけ
+                a href="#" ほにゃぺけ
               li
           li
-            a(href="#")
-              span.glyphicon.glyphicon-log-out(aria-hidden="true") ログアウト
-    = yield
+            a href="#"
+              span.glyphicon.glyphicon-log-out aria-hidden="true" ログアウト
+    - if @does_not_have_sidebar
+      = yield
+    - else
+      #main.container-fluid
+        = yield

@@ -1,4 +1,4 @@
-class Projects::RequestsController < ApplicationController
+class Divisions::RequestSchemata::RequestsController < ApplicationController
   def index
     @request_schemata =
       [{
@@ -11,5 +11,8 @@ class Projects::RequestsController < ApplicationController
          id: 'fugapiyo',
          name: 'ふがぴよ'
        }]
+  end
+
+  def show
   end
 end

@@ -1,2 +1,0 @@
-module Divisions::RequestsHelper
-end

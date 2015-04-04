@@ -184,7 +184,7 @@ body,
 }
 
 #main {
-    padding-left: 220px;
+    padding-left: 300px;
 }
 
 #brand-logo {
@@ -197,7 +197,7 @@ body,
     top: 50px;
     left: 0;
     bottom: 0;
-    width: 200px;
+    width: 280px;
     border-right: 1px solid $navbar-default-border;
     background-color: $navbar-default-bg;
     
@@ -220,4 +220,9 @@ body,
         padding: 5px 10px;
         background-color: $gray-lighter;
     }
+}
+
+.glyphicon:before {
+  position: relative;
+  top: 2px;
 }

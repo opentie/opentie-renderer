@@ -1,0 +1,34 @@
+doctype html
+
+html
+  head
+    meta charset="UTF-8"
+    title
+      = content_for :title
+    = stylesheet_link_tag    'application'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+  body
+    nav#navbar.navbar.navbar-default.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href="#")
+            img#brand-logo(src= asset_path("logo.svg"))
+        ul.nav.navbar-nav.navbar-right
+          li.active
+            a(href="#")
+              span.glyphicon.glyphicon-dashboard(aria-hidden="true") ダッシュボード
+          li.dropdown
+            a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-expanded="false")
+              span.glyphicon.glyphicon-user(aria-hidden="true") グループ切り替え
+              span.caret
+            ul.dropdown-menu(role="menu")
+              li
+                a(href="#") なんちゃら
+              li
+                a(href="#") ほにゃぺけ
+              li
+          li
+            a(href="#")
+              span.glyphicon.glyphicon-log-out(aria-hidden="true") ログアウト
+    = yield

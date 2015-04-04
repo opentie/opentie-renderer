@@ -1,0 +1,3 @@
+class RequestSchemataController < ApplicationController
+  
+end

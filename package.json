@@ -1,0 +1,17 @@
+{
+  "name": "opentie-renderer",
+  "scripts": {
+    "bundle": "browserify -t coffeeify --extension=\".coffee\" app/assets/javascripts/index.js -o app/assets/javascripts/bundle.js",
+    "watch-js": "watchify -t coffeeify --extension=\".coffee\" app/assets/javascripts/index.js -o app/assets/javascripts/bundle.js",
+    "start": "npm run watch-js & rails s"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.7",
+    "coffeeify": "^1.0.0",
+    "watchify": "^3.1.0"
+  },
+  "dependencies": {
+    "coffeex": "^4.0.1",
+    "react": "^0.13.1"
+  }
+}

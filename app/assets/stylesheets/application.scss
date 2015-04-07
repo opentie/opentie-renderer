@@ -224,5 +224,19 @@ body,
 
 .glyphicon:before {
   position: relative;
-  top: 2px;
+  top: 1px;
+}
+
+.navbar {
+  .glyphicon:before {
+    position: relative;
+    top: 2px;
+    left: -2px;
+  }
+}
+
+.form-group .table tr {
+  td, th {
+    vertical-align: middle;
+  }
 }

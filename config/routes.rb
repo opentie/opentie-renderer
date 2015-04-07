@@ -6,17 +6,18 @@ Rails.application.routes.draw do
   root 'dashboard#index'
 
   resources :projects do
-    resources :request_shemata, to: 'projects/request_schemata'
-    resources :requests       , to: 'projects/requests'
+    resources :request_schemata, controller: 'projects/request_schemata' do
+      resource :request, controller: 'projects/request_schemata/request'
+    end
   end
 
   resources :divisions do
-    resources :request_shemata  , to: 'divisions/request_schemata' do
-      resources :requests         , to: 'divisions/request_schemata/requests'
+    resources :request_schemata, controller: 'divisions/request_schemata' do
+      resources :requests      , controller: 'divisions/request_schemata/requests'
     end
-    resources :project_histories, to: 'divisions/project_histories'
-    resources :projects         , to: 'divisions/projects' do
-      resources :requests         , to: 'divisions/projects/requests'
+    resources :project_histories, controller: 'divisions/project_histories'
+    resources :projects         , controller: 'divisions/projects' do
+      resources :requests, controller: 'divisions/projects/requests'
     end
   end
 

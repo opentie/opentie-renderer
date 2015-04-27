@@ -29,5 +29,7 @@ module OpentieRenderer
     # config.i18n.default_locale = :de
 
     config.app_name = "opentie"
+
+    config.autoload_paths += %W(#{config.root}/lib)
   end
 end

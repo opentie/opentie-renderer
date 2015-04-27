@@ -51,7 +51,7 @@ class MultiCheckInput extends ChoiceInput
               type: 'checkbox'
               value: choice.value
               defaultChecked: @isSelected(choice.value)
-            _ choice.label
+            _ if choice.label? then choice.label else choice.value
 
 class RadioInput extends ChoiceInput
   template: cfx ($, _) ->
@@ -66,7 +66,7 @@ class RadioInput extends ChoiceInput
               type: 'radio'
               value: choice.value
               defaultChecked: @isSelected(choice.value)
-            _ choice.label
+            _ if choice.label? then choice.label else choice.value
 
 class SelectInput extends Input
   template: cfx ($, _) ->
@@ -79,7 +79,7 @@ class SelectInput extends Input
           for choice in @schema.choices
             $.option
               value: choice.value,
-              choice.label
+              if choice.label? then choice.label else choice.value
 
 class NumberInput extends Input
   template: cfx ($, _) ->
@@ -115,26 +115,33 @@ class Formaline extends React.Component
 
   render: -> @template this
 
-class TableTextInput extends Input
+class TableCellInput extends Input
+  handleChange: ->
+    @props.onChange.apply null, arguments
+
+class TableTextInput extends TableCellInput
   template: cfx ($, _) ->
     $.input '.form-control',
       type: 'text'
-      name: @schema.name
+      name: @schema.nestedName
       defaultValue: @props.value
       placeholder: @schema.placeholder
+      onChange: @handleChange.bind(this)
 
-class TableNumberInput extends Input
+class TableNumberInput extends TableCellInput
   template: cfx ($, _) ->
     $.input '.form-control',
       type: 'number'
-      name: @schema.name
+      name: @schema.nestedName
       defaultValue: @props.value
       placeholder: @schema.placeholder
+      onChange: @handleChange.bind(this)
 
-class TableSelectInput extends Input
+class TableSelectInput extends TableCellInput
   template: cfx ($, _) ->
     $.select '.form-control',
-      name: @schema.name
+      name: @schema.nestedName
+      onChange: @handleChange.bind(this)
       defaultValue: @props.value, ->
         for choice in @schema.choices
           $.option
@@ -175,22 +182,27 @@ class TableInput extends Input
             $.tr key: value._key, ->
               $.th "#{i+1}"
               for child in @schema.children
-                $.td ->
+                $.td key: child.name, ->
+                  nestedName = "#{@schema.name}[#{i}][#{child.name}]"
                   $ @switchInput(child),
-                    schema: child
+                    schema: Object.create(child, nestedName: { value: nestedName })
                     value: value[child.name]
+                    onChange: @handleChange.bind(this, i, child.name)
               $.td ->
                 $.button '.btn.btn-danger',
                   type: 'button',
                   onClick: @removeRow.bind(this, i), ->
                     $.span '.glyphicon.glyphicon-remove', ariaHidden: true
           $.tr key: 'footer', ->
-            $.td colSpan: @schema.children.length+1
-            $.td ->
+            $.td '.text-center', colSpan: @schema.children.length+2, ->
               $.button '.btn.btn-success',
                 type: 'button',
                 onClick: @addRow.bind(this), ->
                   $.span '.glyphicon.glyphicon-plus', ariaHidden: true
+
+  handleChange: (i, name, event) ->
+    @state.value[i][name] = event.target.value
+    @setState @state
 
   removeRow: (i) ->
     @state.value.splice i, 1
@@ -302,5 +314,7 @@ schema = [
 ]
 
 $ ->
-  React.render React.createElement(Formaline, schema: schema, value: data),
+  #json = JSON.parse($('#json').text())
+  json = schema: schema, value: data
+  React.render React.createElement(Formaline, schema: json.schema, value: json.value),
     document.getElementById('form-wrapper')

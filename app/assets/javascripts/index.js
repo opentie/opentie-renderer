@@ -1,1 +1,1 @@
-var formaline = require('./formaline');
+var formalin = require('./formalin');

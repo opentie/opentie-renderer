@@ -5,15 +5,26 @@
 
 .container
   .row.col-xs-8.col-xs-offset-2
-    .panel.panel-default
-      .panel-heading
-        |管理している企画一覧
-      ul.list-group
-        - for project in @projects
-          li.list-group-item
-            span.badge 14
-            = link_to project[:name], path_to(project)
-      .panel-body(style="text-align: center")
-        a.btn.btn-primary(href="#/projects/new")
-          span.glyphicon.glyphicon-plus
-          |新しい企画を登録する
+    - if @projects.present?
+      .panel.panel-default
+        .panel-heading
+          |管理している企画一覧
+        ul.list-group
+          - @projects.each do |project|
+            li.list-group-item
+              span.badge 14
+              = link_to project['name'], path_to(project)
+        .panel-body.text-center
+          a.btn.btn-primary href="/projects/new"
+            span.glyphicon.glyphicon-plus
+            |新しい企画を登録する
+
+    - if @divisions.present?
+      .panel.panel-default
+        .panel-heading
+          |所属している局一覧
+        ul.list-group
+          - @divisions.each do |division|
+            li.list-group-item
+              span.badge 14
+              = link_to division['name'], path_to(division)

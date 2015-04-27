@@ -5,6 +5,11 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'dashboard#index'
 
+  get :dashboard, controller: 'dashboard', action: :index
+
+  get :login, controller: 'sessions', action: :new
+  post :login, controller: 'sessions', action: :create
+
   resources :projects do
     resources :request_schemata, controller: 'projects/request_schemata' do
       resource :request, controller: 'projects/request_schemata/request'

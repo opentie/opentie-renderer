@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var ChoiceInput, Formaline, Input, MultiCheckInput, NumberInput, ParagraphInput, RadioInput, React, SelectInput, TableInput, TableNumberInput, TableSelectInput, TableTextInput, TextInput, cfx, data, inc, schema,
+var ChoiceInput, Formaline, Input, MultiCheckInput, NumberInput, ParagraphInput, RadioInput, React, SelectInput, TableCellInput, TableInput, TableNumberInput, TableSelectInput, TableTextInput, TextInput, cfx, data, inc, schema,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -118,7 +118,7 @@ MultiCheckInput = (function(superClass) {
               value: choice.value,
               defaultChecked: this.isSelected(choice.value)
             });
-            return _(choice.label);
+            return _(choice.label != null ? choice.label : choice.value);
           });
         }));
       }
@@ -154,7 +154,7 @@ RadioInput = (function(superClass) {
               value: choice.value,
               defaultChecked: this.isSelected(choice.value)
             });
-            return _(choice.label);
+            return _(choice.label != null ? choice.label : choice.value);
           });
         }));
       }
@@ -188,7 +188,7 @@ SelectInput = (function(superClass) {
           choice = ref[j];
           results.push($.option({
             value: choice.value
-          }, choice.label));
+          }, choice.label != null ? choice.label : choice.value));
         }
         return results;
       });
@@ -273,6 +273,21 @@ Formaline = (function(superClass) {
 
 })(React.Component);
 
+TableCellInput = (function(superClass) {
+  extend(TableCellInput, superClass);
+
+  function TableCellInput() {
+    return TableCellInput.__super__.constructor.apply(this, arguments);
+  }
+
+  TableCellInput.prototype.handleChange = function() {
+    return this.props.onChange.apply(null, arguments);
+  };
+
+  return TableCellInput;
+
+})(Input);
+
 TableTextInput = (function(superClass) {
   extend(TableTextInput, superClass);
 
@@ -283,15 +298,16 @@ TableTextInput = (function(superClass) {
   TableTextInput.prototype.template = cfx(function($, _) {
     return $.input('.form-control', {
       type: 'text',
-      name: this.schema.name,
+      name: this.schema.nestedName,
       defaultValue: this.props.value,
-      placeholder: this.schema.placeholder
+      placeholder: this.schema.placeholder,
+      onChange: this.handleChange.bind(this)
     });
   });
 
   return TableTextInput;
 
-})(Input);
+})(TableCellInput);
 
 TableNumberInput = (function(superClass) {
   extend(TableNumberInput, superClass);
@@ -303,15 +319,16 @@ TableNumberInput = (function(superClass) {
   TableNumberInput.prototype.template = cfx(function($, _) {
     return $.input('.form-control', {
       type: 'number',
-      name: this.schema.name,
+      name: this.schema.nestedName,
       defaultValue: this.props.value,
-      placeholder: this.schema.placeholder
+      placeholder: this.schema.placeholder,
+      onChange: this.handleChange.bind(this)
     });
   });
 
   return TableNumberInput;
 
-})(Input);
+})(TableCellInput);
 
 TableSelectInput = (function(superClass) {
   extend(TableSelectInput, superClass);
@@ -322,7 +339,8 @@ TableSelectInput = (function(superClass) {
 
   TableSelectInput.prototype.template = cfx(function($, _) {
     return $.select('.form-control', {
-      name: this.schema.name,
+      name: this.schema.nestedName,
+      onChange: this.handleChange.bind(this),
       defaultValue: this.props.value
     }, function() {
       var choice, j, len, ref, results;
@@ -340,7 +358,7 @@ TableSelectInput = (function(superClass) {
 
   return TableSelectInput;
 
-})(Input);
+})(TableCellInput);
 
 TableInput = (function(superClass) {
   extend(TableInput, superClass);
@@ -413,10 +431,19 @@ TableInput = (function(superClass) {
               ref1 = this.schema.children;
               for (k = 0, len1 = ref1.length; k < len1; k++) {
                 child = ref1[k];
-                $.td(function() {
+                $.td({
+                  key: child.name
+                }, function() {
+                  var nestedName;
+                  nestedName = this.schema.name + "[" + i + "][" + child.name + "]";
                   return $(this.switchInput(child), {
-                    schema: child,
-                    value: value[child.name]
+                    schema: Object.create(child, {
+                      nestedName: {
+                        value: nestedName
+                      }
+                    }),
+                    value: value[child.name],
+                    onChange: this.handleChange.bind(this, i, child.name)
                   });
                 });
               }
@@ -435,10 +462,9 @@ TableInput = (function(superClass) {
           return $.tr({
             key: 'footer'
           }, function() {
-            $.td({
-              colSpan: this.schema.children.length + 1
-            });
-            return $.td(function() {
+            return $.td('.text-center', {
+              colSpan: this.schema.children.length + 2
+            }, function() {
               return $.button('.btn.btn-success', {
                 type: 'button',
                 onClick: this.addRow.bind(this)
@@ -453,6 +479,11 @@ TableInput = (function(superClass) {
       });
     });
   });
+
+  TableInput.prototype.handleChange = function(i, name, event) {
+    this.state.value[i][name] = event.target.value;
+    return this.setState(this.state);
+  };
 
   TableInput.prototype.removeRow = function(i) {
     this.state.value.splice(i, 1);
@@ -588,18 +619,23 @@ schema = [
 ];
 
 $(function() {
-  return React.render(React.createElement(Formaline, {
+  var json;
+  json = {
     schema: schema,
     value: data
+  };
+  return React.render(React.createElement(Formaline, {
+    schema: json.schema,
+    value: json.value
   }), document.getElementById('form-wrapper'));
 });
 
 
 
 },{"coffeex":8,"react":163}],2:[function(require,module,exports){
-var formaline = require('./formaline');
+var formalin = require('./formalin');
 
-},{"./formaline":1}],3:[function(require,module,exports){
+},{"./formalin":1}],3:[function(require,module,exports){
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
 // THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!

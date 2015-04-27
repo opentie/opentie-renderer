@@ -1,0 +1,12 @@
+h1 = @json["name"]
+
+h2 局員一覧
+
+table.table
+  tr
+    th #
+    th 名前
+  - @members.each.with_index do |member, i|
+    tr
+      th = i+1
+      td = member["name"]

@@ -3,5 +3,6 @@ class Divisions::RequestSchemataController < ApplicationController
   end
 
   def show
+    
   end
 end

@@ -16,4 +16,12 @@ class ApplicationController < ActionController::Base
          name: 'ふがぴよ'
        }]
   end
+
+  rescue_from ApiClient::NotAuthorized do
+    redirect_to '/login'
+  end
+
+  def api
+    ApiClient.new(request, response)
+  end
 end

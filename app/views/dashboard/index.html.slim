@@ -5,12 +5,12 @@
 
 .container
   .row.col-xs-8.col-xs-offset-2
-    - if @projects.present?
+    - if my_projects.present?
       .panel.panel-default
         .panel-heading
           |管理している企画一覧
         ul.list-group
-          - @projects.each do |project|
+          - my_projects.each do |project|
             li.list-group-item
               span.badge 14
               = link_to project['name'], path_to(project)
@@ -19,12 +19,12 @@
             span.glyphicon.glyphicon-plus
             |新しい企画を登録する
 
-    - if @divisions.present?
+    - if my_divisions.present?
       .panel.panel-default
         .panel-heading
           |所属している局一覧
         ul.list-group
-          - @divisions.each do |division|
+          - my_divisions.each do |division|
             li.list-group-item
               span.badge 14
               = link_to division['name'], path_to(division)

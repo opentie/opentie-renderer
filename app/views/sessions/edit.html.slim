@@ -1,0 +1,12 @@
+#login.container
+  - set_title 'ログアウト'
+
+  .col-sm-8.col-sm-offset-2
+    h1 ログアウト
+    form method="POST"
+      input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
+      p.text-center ログアウトしますか?
+      .text-center
+        a.btn.btn-default href="/" キャンセル
+        | &nbsp;
+        button.btn.btn-primary type="submit" ログアウト

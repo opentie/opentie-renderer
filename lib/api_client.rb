@@ -13,7 +13,7 @@ class ApiClient
   end
 
   def run(method, path, body)
-    headers = { 'Cookie': @request.headers['Cookie'] }
+    headers = { 'Cookie': @request.headers['Cookie'] }.compact
     begin
       response = @conn.run_request(method, "/api/v1#{path}", body, headers)
     rescue Faraday::ClientError => err

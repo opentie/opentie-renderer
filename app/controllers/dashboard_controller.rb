@@ -4,7 +4,5 @@ class DashboardController < ApplicationController
 
     res = api.get('/dashboard')
     @json = res.body
-    @projects = @json["projects"] || []
-    @divisions = @json["divisions"] || []
   end
 end

@@ -12,4 +12,27 @@ module ApplicationHelper
   def set_title(title)
     content_for :title, "#{title} - #{OpentieRenderer::Application.config.app_name}"
   end
+
+  def group_switch_label
+    labels = []
+    labels << '企画' if my_projects.present?
+    labels << '局' if my_divisions.present?
+    labels.join('/')
+  end
+
+  def all_projects
+    @json['all_projects'] || []
+  end
+
+  def my_projects
+    @json['projects'] || []
+  end
+
+  def my_divisions
+    @json['divisions'] || []
+  end
+
+  def all_request_schemata
+    @json['all_request_schemata'] || []
+  end
 end

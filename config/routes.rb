@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   get :login, controller: 'sessions', action: :new
   post :login, controller: 'sessions', action: :create
+  get :logout, controller: 'sessions', action: :edit
+  post :logout, controller: 'sessions', action: :destroy
 
   resources :projects do
     resources :request_schemata, controller: 'projects/request_schemata' do

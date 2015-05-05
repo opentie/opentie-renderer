@@ -252,26 +252,15 @@ Formalizr = (function(superClass) {
   };
 
   Formalizr.prototype.template = cfx(function($, _) {
-    return $.form('.fromalizr', {
-      method: 'POST',
-      action: this.props.action || '.'
-    }, function() {
-      var child, i, j, len, nestedName, ref;
-      $.input({
-        type: 'hidden',
-        name: '_method',
-        value: this.props.method || 'POST'
-      });
-      $.input({
-        type: 'hidden',
-        name: 'authenticity_token',
-        value: this.props.authenticityToken
-      });
+    this.props.prefix = this.props.prefix || 'formalizr';
+    return $.div('.fromalizr', function() {
+      var child, i, j, len, nestedName, ref, results;
       ref = this.props.schema;
+      results = [];
       for (i = j = 0, len = ref.length; j < len; i = ++j) {
         child = ref[i];
-        nestedName = "formalizr[" + child.name + "]";
-        $(this.switchInput(child), {
+        nestedName = this.props.prefix + "[" + child.name + "]";
+        results.push($(this.switchInput(child), {
           readonly: this.props.readonly,
           schema: Object.create(child, {
             nestedName: {
@@ -279,14 +268,9 @@ Formalizr = (function(superClass) {
             }
           }),
           value: this.props.value[child.name]
-        });
+        }));
       }
-      if (!this.props.readonly) {
-        $.hr;
-        return $.div('.text-right', function() {
-          return $.button('.btn.btn-primary.btn-lg', this.props.submit || '提出');
-        });
-      }
+      return results;
     });
   });
 

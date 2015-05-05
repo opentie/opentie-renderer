@@ -21,6 +21,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    api_call
     redirect_to '/'
   end
 end

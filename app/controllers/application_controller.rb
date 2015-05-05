@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_default_request
 
   def api_client
-    ApiClient.new(request, response)    
+    ApiClient.new(request, response)
   end
 
   def set_default_request
@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
     @api_method = params[:_method].try(:downcase).try(:to_sym) || request.method_symbol
     @api_path = request.path_info
   end
-  
+
   def api_call
     @response_json = api_client.run(@api_method, @api_path, @api_body).body
   end

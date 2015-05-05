@@ -15,9 +15,7 @@ form method="POST"
   input type="hidden" name="refuse" value="1"
 
 - if tie_request['status'] == 0
-  = insert_formalizr 'form-wrapper',
+  = insert_formalizr 'formalizr'
       readonly: true,
       schema: tie_request_schema['payload'],
-      value: (tie_request.try(:[], 'payload') || {}),
-      method: 'PUT',
-      action: path_to(tie_project, tie_request_schema, :request)
+      value: (tie_request.try(:[], 'payload') || {})

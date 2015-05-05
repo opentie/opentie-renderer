@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get :logout, controller: 'sessions', action: :edit
   post :logout, controller: 'sessions', action: :destroy
 
+  get :register, controller: 'accounts', action: :new
+  post :register, controller: 'accounts', action: :create
+
   resources :projects,
     only: [:show, :edit, :new, :create] do
 

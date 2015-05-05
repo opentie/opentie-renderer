@@ -1,4 +1,6 @@
-#form-wrapper
-
-script#formalizr-json type="application/json"
-  = { schema: tie_request_schema['payload'], value: {}, readonly: true }.to_json
+h1 = tie_request_schema['name']
+h2 申請書の書式
+= insert_formalizr 'formalizr',
+    schema: tie_request_schema['payload'],
+    value: (tie_request.try(:[], 'payload') || {}),
+    readonly: true

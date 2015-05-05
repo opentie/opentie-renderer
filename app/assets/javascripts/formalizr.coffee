@@ -42,7 +42,7 @@ class MultiCheckInput extends Input
   isSelected: (value) ->
     return false unless Array.isArray(@props.value)
     (@props.value || []).indexOf(value) isnt -1
-    
+
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
@@ -115,27 +115,14 @@ class Formalizr extends React.Component
       when 'table'      then TableInput
 
   template: cfx ($, _) ->
-    $.form '.fromalizr',
-      method: 'POST'
-      action: (@props.action || '.'), ->
-        $.input
-          type: 'hidden'
-          name: '_method'
-          value: (@props.method || 'POST')
-        $.input
-          type: 'hidden'
-          name: 'authenticity_token'
-          value: @props.authenticityToken
-        for child, i in @props.schema
-          nestedName = "formalizr[#{child.name}]"
-          $ @switchInput(child),
-            readonly: @props.readonly
-            schema: Object.create(child, nestedName: { value: nestedName })
-            value: @props.value[child.name]
-        unless @props.readonly
-          $.hr
-          $.div '.text-right', ->
-            $.button '.btn.btn-primary.btn-lg', (@props.submit || '提出')
+    @props.prefix = @props.prefix || 'formalizr'
+    $.div '.fromalizr', ->
+      for child, i in @props.schema
+        nestedName = "#{@props.prefix}[#{child.name}]"
+        $ @switchInput(child),
+          readonly: @props.readonly
+          schema: Object.create(child, nestedName: { value: nestedName })
+          value: @props.value[child.name]
 
   render: -> @template this
 
@@ -182,7 +169,7 @@ class TableInput extends Input
       value: (@props.value || []).map (row) ->
         row._key = inc()
         row
-  
+
   switchInput: (input) ->
     switch input.type
       when 'text'       then TableTextInput

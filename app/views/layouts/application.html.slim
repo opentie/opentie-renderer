@@ -9,9 +9,9 @@ html
     = javascript_include_tag 'application'
     = csrf_meta_tags
   body
-    - if division?
+    - if !@does_not_have_sidebar && division?
       = render partial: 'layouts/sidebar/division'
-    - if project?
+    - if !@does_not_have_sidebar && project?
       = render partial: 'layouts/sidebar/project'
 
     nav#navbar.navbar.navbar-default.navbar-fixed-top

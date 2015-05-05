@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from ApiClient::Unauthorized do
-    redirect_to controller: '/sessions', action: :new, redirect_to: request.path_info
+    redirect_to controller: '/sessions', action: :new, redirect_to: request.url
   end
 
   before_action :set_default_request
@@ -17,9 +17,18 @@ class ApplicationController < ActionController::Base
     @api_body = nil
     @api_method = params[:_method].try(:downcase).try(:to_sym) || request.method_symbol
     @api_path = request.path_info
+    @api_query = URI.parse(request.url).query
   end
 
   def api_call
-    @response_json = api_client.run(@api_method, @api_path, @api_body).body
+    path = @api_path
+    path += "?#{@api_query}" unless @api_query.nil?
+    response = api_client.run(@api_method, path, @api_body)
+    case response.status
+    when 200...300
+      @response_json = response.body
+    when 301..303
+      redirect_to response.headers['x-location']
+    end
   end
 end

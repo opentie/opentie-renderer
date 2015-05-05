@@ -5,7 +5,7 @@ class ApiClient
     @response = response
     @conn = Faraday::Connection.new(url: 'http://127.0.0.1:4000') do |faraday|
       faraday.request  :json
-      faraday.response :raise_error
+      #faraday.response :raise_error
       faraday.response :json
       faraday.adapter  Faraday.default_adapter
     end
@@ -15,14 +15,17 @@ class ApiClient
     headers = { Cookie: @request.headers['Cookie'] }.compact
     begin
       response = @conn.run_request(method, "/api/v1#{path}", body, headers)
-    rescue Faraday::ClientError => err
-      case err.response[:status]
+      case response.status
+      when 200, 201, 301..303
+        response
       when 401
         raise Unauthorized
       when 404
         raise NotFound
+      else
+        binding.pry
+        raise "unexpected response"
       end
-      raise err
     end
     @response.headers['Set-Cookie'] = response.headers['Set-Cookie']
     response

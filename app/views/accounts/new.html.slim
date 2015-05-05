@@ -1,25 +1,26 @@
-form method="POST"
-  = hidden_field_tag(:authenticity_token, form_authenticity_token)
+#login.container
+  form method="POST"
+    = hidden_field_tag(:authenticity_token, form_authenticity_token)
 
-  h4 基本情報
-  .form-group
-    label for="name" 氏名
-    input.form-control type="text" name="name"
-  .form-group
-    label for="email" メールアドレス
-    input.form-control type="email" name="email"
-  .form-group
-    label for="password" パスワード
-    input.form-control type="password" name="password"
-  .form-group
-    label for="password_confirmation" パスワードの確認
-    input.form-control type="password" name="password_confirmation"
+    h4 基本情報
+    .form-group
+      label for="name" 氏名
+      input.form-control type="text" name="name"
+    .form-group
+      label for="email" メールアドレス
+      input.form-control type="email" name="email"
+    .form-group
+      label for="password" パスワード
+      input.form-control type="password" name="password"
+    .form-group
+      label for="password_confirmation" パスワードの確認
+      input.form-control type="password" name="password_confirmation"
 
-  h4 追加情報
-  = insert_formalizr 'payload',
-      schema: tie_account_schema['value'],
-      value: {},
-      action: '/register'
-  hr
-  div.text-right
-    button.btn.btn-primary.btn-lg 登録
+    h4 追加情報
+    = insert_formalizr 'payload',
+        schema: tie_account_schema['value'],
+        value: {},
+        action: '/register'
+    hr
+    div.text-right
+      button.btn.btn-primary.btn-lg 登録

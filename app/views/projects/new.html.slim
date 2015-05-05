@@ -1,4 +1,12 @@
-script#json type="application/json"
-  == @json
+#login.container
+  h1 企画新規登録
 
-#form-wrapper.col-xs-8.col-xs-offset-2
+  form method="POST" action="#{path_to(:projects)}"
+    = hidden_field_tag(:_method, 'POST')
+    = hidden_field_tag(:authenticity_token, form_authenticity_token)
+    = insert_formalizr 'payload',
+        schema: tie_project_schema['value'],
+        value: {}
+    hr
+    div.text-right
+      button.btn.btn-primary.btn-lg 登録

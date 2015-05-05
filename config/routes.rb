@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get :register, controller: 'accounts', action: :new
   post :register, controller: 'accounts', action: :create
 
+  get 'register/confirm', controller: 'accounts', action: :confirm
+  
   resources :projects,
     only: [:show, :edit, :new, :create] do
 

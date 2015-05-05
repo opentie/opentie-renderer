@@ -15,7 +15,7 @@ form method="POST"
   input type="hidden" name="refuse" value="1"
 
 - if tie_request['status'] == 0
-  = insert_formalizr 'formalizr'
+  = insert_formalizr 'formalizr',
       readonly: true,
       schema: tie_request_schema['payload'],
       value: (tie_request.try(:[], 'payload') || {})

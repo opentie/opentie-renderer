@@ -1,5 +1,7 @@
 class AccountsController < ApplicationController
   def new
+    @does_not_have_sidebar = true
+
     api_call
   end
 
@@ -8,6 +10,10 @@ class AccountsController < ApplicationController
       :payload, :name, :email,
       :password, :password_confirmation
     )
+    api_call
+  end
+
+  def confirm
     api_call
   end
 end

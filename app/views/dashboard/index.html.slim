@@ -18,6 +18,11 @@
           a.btn.btn-primary href="/projects/new"
             span.glyphicon.glyphicon-plus
             |新しい企画を登録する
+    - else
+      .text-center
+        a.btn.btn-primary href="/projects/new"
+          span.glyphicon.glyphicon-plus
+            |新しい企画を登録する
 
     - if my_divisions.present?
       .panel.panel-default

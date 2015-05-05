@@ -1,1 +1,14 @@
-h1 申請一覧
+h1 = tie_request_schema['name']
+h2 申請状況
+
+dl.dl-horizontal
+  dt 申請数
+  dd = tie_requests.length
+  dt 申請が必要な企画数
+  dd = (tie_request_schema['target_projects'] || []).length
+
+- tie_requests.each do |request|
+  p = request['payload']
+
+h2 申請書の書式
+= link_to "書式を確認する", path_to(tie_division, tie_request_schema)

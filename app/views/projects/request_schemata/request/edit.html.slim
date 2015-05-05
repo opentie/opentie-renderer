@@ -1,0 +1,7 @@
+h1 = tie_request_schema['name']
+
+= insert_formalizr 'form-wrapper',
+    schema: tie_request_schema['payload'],
+    value: (tie_request.try(:[], 'payload') || {}),
+    method: 'PUT',
+    action: path_to(tie_project, tie_request_schema, :request)

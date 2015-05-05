@@ -1,5 +1,7 @@
 React = require 'react'
 cfx = require 'coffeex'
+Entities = require('html-entities').AllHtmlEntities
+entities = new Entities()
 
 inc = (->
   num = 0
@@ -18,8 +20,9 @@ class TextInput extends Input
       $.label @schema.title
       $.p @schema.note
       $.input '.form-control',
+        disabled: @props.readonly
         type: 'text'
-        name: @schema.name
+        name: @schema.nestedName
         defaultValue: @props.value
         placeholder: @schema.placeholder
 
@@ -29,16 +32,17 @@ class ParagraphInput extends Input
       $.label @schema.title
       $.p @schema.note
       $.textarea '.form-control',
+        disabled: @props.readonly
         rows: (@schema.rows or 3)
-        name: @schema.name
+        name: @schema.nestedName
         defaultValue: @props.value
         placeholder: @schema.placeholder
 
-class ChoiceInput extends Input
+class MultiCheckInput extends Input
   isSelected: (value) ->
-    [].concat(@props.value || []).indexOf(value) isnt -1
-
-class MultiCheckInput extends ChoiceInput
+    return false unless Array.isArray(@props.value)
+    (@props.value || []).indexOf(value) isnt -1
+    
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
@@ -47,13 +51,14 @@ class MultiCheckInput extends ChoiceInput
         $.div '.checkbox', ->
           $.label ->
             $.input
-              name: "#{@schema.name}[]"
+              disabled: @props.readonly
+              name: "#{@schema.nestedName}[]"
               type: 'checkbox'
               value: choice.value
               defaultChecked: @isSelected(choice.value)
             _ if choice.label? then choice.label else choice.value
 
-class RadioInput extends ChoiceInput
+class RadioInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
@@ -62,10 +67,11 @@ class RadioInput extends ChoiceInput
         $.div '.radio', ->
           $.label ->
             $.input
-              name: "#{@schema.name}"
+              disabled: @props.readonly
+              name: "#{@schema.nestedName}"
               type: 'radio'
               value: choice.value
-              defaultChecked: @isSelected(choice.value)
+              defaultChecked: choice.value is @props.value
             _ if choice.label? then choice.label else choice.value
 
 class SelectInput extends Input
@@ -74,10 +80,11 @@ class SelectInput extends Input
       $.label @schema.title
       $.p @schema.note
       $.select '.form-control',
-        name: @schema.name
+        name: @schema.nestedName
         defaultValue: @props.value, ->
           for choice in @schema.choices
             $.option
+              disabled: @props.readonly
               value: choice.value,
               if choice.label? then choice.label else choice.value
 
@@ -87,12 +94,13 @@ class NumberInput extends Input
       $.label @schema.title
       $.p @schema.note
       $.input '.form-control',
+        disabled: @props.readonly
         type: 'number'
-        name: @schema.name
+        name: @schema.nestedName
         defaultValue: @props.value
         placeholder: @schema.placeholder
 
-class Formaline extends React.Component
+class Formalizr extends React.Component
   constructor: (props) ->
     super props
 
@@ -107,11 +115,27 @@ class Formaline extends React.Component
       when 'table'      then TableInput
 
   template: cfx ($, _) ->
-    $.form ->
-      for child, i in @props.schema
-        $ @switchInput(child),
-          schema: child
-          value: @props.value[child.name]
+    $.form '.fromalizr',
+      method: 'POST'
+      action: (@props.action || '.'), ->
+        $.input
+          type: 'hidden'
+          name: '_method'
+          value: (@props.method || 'POST')
+        $.input
+          type: 'hidden'
+          name: 'authenticity_token'
+          value: @props.authenticityToken
+        for child, i in @props.schema
+          nestedName = "formalizr[#{child.name}]"
+          $ @switchInput(child),
+            readonly: @props.readonly
+            schema: Object.create(child, nestedName: { value: nestedName })
+            value: @props.value[child.name]
+        unless @props.readonly
+          $.hr
+          $.div '.text-right', ->
+            $.button '.btn.btn-primary.btn-lg', (@props.submit || '提出')
 
   render: -> @template this
 
@@ -122,6 +146,7 @@ class TableCellInput extends Input
 class TableTextInput extends TableCellInput
   template: cfx ($, _) ->
     $.input '.form-control',
+      disabled: @props.readonly
       type: 'text'
       name: @schema.nestedName
       defaultValue: @props.value
@@ -131,6 +156,7 @@ class TableTextInput extends TableCellInput
 class TableNumberInput extends TableCellInput
   template: cfx ($, _) ->
     $.input '.form-control',
+      disabled: @props.readonly
       type: 'number'
       name: @schema.nestedName
       defaultValue: @props.value
@@ -145,6 +171,7 @@ class TableSelectInput extends TableCellInput
       defaultValue: @props.value, ->
         for choice in @schema.choices
           $.option
+            disabled: @props.readonly
             value: choice.value,
             choice.label
 
@@ -152,7 +179,7 @@ class TableInput extends Input
   constructor: (props) ->
     super props
     @state =
-      value: @props.value.map (row) ->
+      value: (@props.value || []).map (row) ->
         row._key = inc()
         row
   
@@ -167,38 +194,45 @@ class TableInput extends Input
       $.label @schema.title
       $.p @schema.note
       $.dl '.dl-horizontal', ->
-        for child in @schema.children
-          if child.note?
-            $.dt child.title
-            $.dd child.note
+        for column in @schema.columns
+          if column.note?
+            $.dt column.title
+            $.dd column.note
       $.table '.table', ->
         $.tbody ->
           $.tr key: 'header', ->
-            $.th -> _ '#'
-            for child in @schema.children
-              $.th child.title
-            $.th '削除'
-          for value, i in @state.value
+            $.th '.text-right', '#'
+            for column in @schema.columns
+              $.th column.title
+            unless @props.readonly
+              $.th '削除'
+          values = @state.value
+          if @props.readonly
+            values = if values.length > 0 then values else [{}]
+          for value, i in values
             $.tr key: value._key, ->
-              $.th "#{i+1}"
-              for child in @schema.children
-                $.td key: child.name, ->
-                  nestedName = "#{@schema.name}[#{i}][#{child.name}]"
-                  $ @switchInput(child),
-                    schema: Object.create(child, nestedName: { value: nestedName })
-                    value: value[child.name]
-                    onChange: @handleChange.bind(this, i, child.name)
-              $.td ->
-                $.button '.btn.btn-danger',
+              $.th '.text-right', "#{i+1}"
+              for column in @schema.columns
+                $.td key: column.name, ->
+                  nestedName = "#{@schema.nestedName}[][#{column.name}]"
+                  $ @switchInput(column),
+                    readonly: @props.readonly
+                    schema: Object.create(column, nestedName: { value: nestedName })
+                    value: value[column.name]
+                    onChange: @handleChange.bind(this, i, column.name)
+              unless @props.readonly
+                $.td ->
+                  $.button '.btn.btn-danger',
+                    type: 'button',
+                    onClick: @removeRow.bind(this, i), ->
+                      $.span '.glyphicon.glyphicon-remove', ariaHidden: true
+          unless @props.readonly
+            $.tr key: 'footer', ->
+              $.td '.text-center', colSpan: @schema.columns.length+2, ->
+                $.button '.btn.btn-success',
                   type: 'button',
-                  onClick: @removeRow.bind(this, i), ->
-                    $.span '.glyphicon.glyphicon-remove', ariaHidden: true
-          $.tr key: 'footer', ->
-            $.td '.text-center', colSpan: @schema.children.length+2, ->
-              $.button '.btn.btn-success',
-                type: 'button',
-                onClick: @addRow.bind(this), ->
-                  $.span '.glyphicon.glyphicon-plus', ariaHidden: true
+                  onClick: @addRow.bind(this), ->
+                    $.span '.glyphicon.glyphicon-plus', ariaHidden: true
 
   handleChange: (i, name, event) ->
     @state.value[i][name] = event.target.value
@@ -210,111 +244,17 @@ class TableInput extends Input
 
   addRow: ->
     initialValue = {}
-    for child in @schema.children
-      initialValue[child.name] = child.default
+    for column in @schema.columns
+      initialValue[column.name] = column.default
       initialValue._key = inc()
 
     @setState {
       value: @state.value.concat([initialValue])
     }
 
-data = {
-  many: [
-    { name: 'アレ', count: 10 }
-    { name: 'ソレ', count: 100 }
-  ]
-  name: 'ほげ'
-  desc: 'ほげほげあ'
-  select1: 'val2'
-  select2: 'val1'
-  select3: 'val1'
-}
-
-schema = [
-  {
-    name: 'many'
-    type: 'table'
-    title: '複数可'
-    note: '複数書ける'
-
-    children: [
-      {
-        name: 'name'
-        type: 'text'
-        title: '物品名'
-        note: '物の名前'
-      },
-      {
-        name: 'count'
-        type: 'number'
-        title: '個数'
-        note: '個数ですね'
-        default: 0
-      },
-      {
-        name: 'select4'
-        type: 'select'
-        title: 'なんか選ぶ'
-        default: 0
-
-        choices: [
-          { value: 'hoi', label: 'ほい' }
-          { value: 'hoge', label: 'ほげ' }
-        ]
-      }      
-    ]
-  },
-  {
-    name: 'name'
-    type: 'text'
-    title: '企画名'
-    note: '企画の名前をなんたら'
-  },
-  {
-    name: 'desc'
-    type: 'paragraph'
-    title: '企画概要'
-    note: 'なんたら'
-    rows: 10
-  },
-  {
-    name: 'select1'
-    type: 'multicheck'
-    title: '選べ'
-    note: '適当に選ぶ'
-
-    choices: [
-      { value: 'val1', label: 'その1' }
-      { value: 'val2', label: 'その2' }
-    ]
-  },
-  {
-    name: 'select2'
-    type: 'radio'
-    title: '選べ'
-    note: 'ひとつ選ぶ'
-
-    choices: [
-      { value: 'val1', label: 'その1' }
-      { value: 'val2', label: 'その2' }
-    ]
-  },
-  {
-    name: 'select3'
-    type: 'select'
-    title: '選べ'
-    note: 'ひとつ選ぶ'
-
-    choices: [
-      { value: 'val1', label: 'その1' }
-      { value: 'val2', label: 'その2' }
-      { value: 'val3', label: 'その3' }
-    ]
-  }
-]
-
 $ ->
-  #json = JSON.parse($('#json').text())
-  json = schema: schema, value: data
-  React.render React.createElement(Formaline, schema: json.schema, value: json.value),
+  jsonElem = $('#form-wrapper > script')
+  return if jsonElem.size() is 0
+  json = JSON.parse(entities.decode(jsonElem.text()))
+  React.render React.createElement(Formalizr, json),
     document.getElementById('form-wrapper')

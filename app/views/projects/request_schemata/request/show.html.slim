@@ -1,0 +1,23 @@
+h1 = tie_request_schema['name']
+
+- if tie_request.nil?
+  .bs-callout.bs-callout-danger
+    h4 未申請
+    | 申請あるいは辞退してください
+
+form method="POST"
+  .btn-group
+    button.btn.btn-warning 辞退
+    = link_to "申請", path_to(tie_project, tie_request_schema, :request, :edit),
+        class: 'btn btn-primary'
+  input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
+  input type="hidden" name="_method" value="PUT"
+  input type="hidden" name="refuse" value="1"
+
+- if tie_request['status'] == 0
+  = insert_formalizr 'form-wrapper',
+      readonly: true,
+      schema: tie_request_schema['payload'],
+      value: (tie_request.try(:[], 'payload') || {}),
+      method: 'PUT',
+      action: path_to(tie_project, tie_request_schema, :request)

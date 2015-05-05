@@ -12,7 +12,7 @@
         ul.list-group
           - my_projects.each do |project|
             li.list-group-item
-              span.badge 14
+              -# span.badge 14
               = link_to project['name'], path_to(project)
         .panel-body.text-center
           a.btn.btn-primary href="/projects/new"
@@ -26,5 +26,5 @@
         ul.list-group
           - my_divisions.each do |division|
             li.list-group-item
-              span.badge 14
+              -# span.badge 14
               = link_to division['name'], path_to(division)

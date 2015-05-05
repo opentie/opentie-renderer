@@ -1,6 +1,6 @@
-- set_title @json['name']
+- set_title tie_division['name']
 
-h1 = @json["name"]
+h1 = tie_division['name']
 
 h2 局員一覧
 
@@ -8,7 +8,7 @@ table.table
   tr
     th #
     th 名前
-  - @members.each.with_index do |member, i|
+  - (tie_division['accounts'] || []).each.with_index do |account, i|
     tr
       th = i+1
-      td = member["name"]
+      td = account["name"]

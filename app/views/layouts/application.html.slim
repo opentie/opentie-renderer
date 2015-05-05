@@ -9,23 +9,10 @@ html
     = javascript_include_tag 'application'
     = csrf_meta_tags
   body
-    - unless @does_not_have_sidebar
-      nav#sidebar.container-fluid
-        h5 企画台帳
-        .row
-          ul.nav.nav-pills.nav-stacked
-            li role="presentation"
-              a href="#" 企画一覧
-            li
-              hr
-            li role="presentation"
-              a href="#" 変更履歴
-        h5 申請台帳
-        .row
-          ul.nav.nav-pills.nav-stacked
-            - for schema in all_request_schemata
-              li role="presentation"
-                = link_to schema['name'], path_to(schema)
+    - if division?
+      = render partial: 'layouts/sidebar/division'
+    - if project?
+      = render partial: 'layouts/sidebar/project'
 
     nav#navbar.navbar.navbar-default.navbar-fixed-top
       .container-fluid
@@ -34,27 +21,28 @@ html
             img#brand-logo src=asset_path("logo.svg")
         - unless @is_login_page
           ul.nav.navbar-nav.navbar-right
-            li
-              = link_to "/" do
-                span.glyphicon.glyphicon-dashboard aria-hidden="true" ダッシュボード
-            li.dropdown
-              a.dropdown-toggle[
-                href="#"
-                data-toggle="dropdown"
-                role="button"
-                aria-expanded="false"]
-                span.glyphicon.glyphicon-user aria-hidden="true"
-                  = "#{group_switch_label}切り替え"
-                span.caret
-              ul.dropdown-menu role="menu"
-                - my_projects.each do |project|
-                  li
-                    = link_to project['name'], path_to(project)
-                - if my_projects.present? && my_divisions.present?
-                  li.divider
-                - my_divisions.each do |division|
-                  li
-                    = link_to division['name'], path_to(division)
+            - if tie_division || tie_project
+              li
+                = link_to "/" do
+                  span.glyphicon.glyphicon-dashboard aria-hidden="true" ダッシュボード
+              li.dropdown
+                a.dropdown-toggle[
+                  href="#"
+                  data-toggle="dropdown"
+                  role="button"
+                  aria-expanded="false"]
+                  span.glyphicon.glyphicon-user aria-hidden="true"
+                    = (tie_division || tie_project)['name']
+                  span.caret
+                ul.dropdown-menu role="menu"
+                  - my_projects.each do |project|
+                    li
+                      = link_to project['name'], project_path(project['id'])
+                  - if my_projects.present? && my_divisions.present?
+                    li.divider
+                  - my_divisions.each do |division|
+                    li
+                      = link_to division['name'], division_path(division['id'])
             li
               a href="/logout"
                 span.glyphicon.glyphicon-log-out aria-hidden="true" ログアウト

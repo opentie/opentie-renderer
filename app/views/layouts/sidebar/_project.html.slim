@@ -1,0 +1,12 @@
+nav#sidebar.container-fluid
+  h5 = tie_project['name']
+  .row
+    ul.nav.nav-pills.nav-stacked
+      li
+        = link_to '企画詳細', path_to(tie_project)
+  h5 各種申請
+  .row
+    ul.nav.nav-pills.nav-stacked
+      - tie_my_request_schemata.each do |schema|
+        li
+          = link_to schema['name'], path_to(tie_project, schema, 'request')

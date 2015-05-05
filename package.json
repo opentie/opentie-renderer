@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "coffeex": "^4.0.1",
+    "html-entities": "^1.1.2",
     "react": "^0.13.1"
   }
 }

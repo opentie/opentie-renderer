@@ -3,6 +3,10 @@
 
   .col-sm-8.col-sm-offset-2
     h1 ログイン
+    - if @invalid_email_or_password
+      .bs-callout.bs-callout-danger
+        h4 ログイン失敗
+        | メールアドレスまたはパスワードが不正です
     form method="POST"
       input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
       .form-group

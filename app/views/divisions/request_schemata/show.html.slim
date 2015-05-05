@@ -1,1 +1,4 @@
-#form-wrapper.col-xs-8.col-xs-offset-2
+#form-wrapper
+
+script#formalizr-json type="application/json"
+  = { schema: tie_request_schema['payload'], value: {}, readonly: true }.to_json

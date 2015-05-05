@@ -1,0 +1,15 @@
+- set_title '企画台帳'
+
+h1 企画台帳
+
+form
+  | 検索ボックス　あとでやる
+
+table.table.table-striped
+  tr
+    th 企画番号
+    th 企画名
+  - tie_projects.each do |project|
+    tr
+      td = project['number']
+      td = project['name']

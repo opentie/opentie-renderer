@@ -1,0 +1,25 @@
+nav#sidebar.container-fluid
+  h5 現在の局
+  .row
+    ul.nav.nav-pills.nav-stacked
+      li
+        = link_to tie_division['name'], path_to(tie_division)
+  h5 企画台帳
+  .row
+    ul.nav.nav-pills.nav-stacked
+      li
+        = link_to '企画一覧', path_to(tie_division, :projects)
+      li
+        hr
+      li
+        = link_to '変更履歴', path_to(tie_division, :project_histories)
+  h5 申請台帳
+  .row
+    ul.nav.nav-pills.nav-stacked
+      li
+        = link_to '各種申請', path_to(tie_division, :request_schemata)
+      li
+        hr
+      - tie_my_request_schemata.each do |schema|
+        li
+          = link_to schema['name'], path_to(tie_division, schema, :requests)

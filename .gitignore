@@ -8,6 +8,9 @@
 /.bundle
 
 /vendor
+/node_modules
+
+npm-debug.log
 
 # Ignore all logfiles and tempfiles.
 /log/*

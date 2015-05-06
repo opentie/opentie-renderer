@@ -18,6 +18,8 @@ class TextInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
+      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
+        $.span '.label.label-danger', "必須"
       $.p @schema.note
       $.input '.form-control',
         disabled: @props.readonly
@@ -30,6 +32,8 @@ class ParagraphInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
+      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
+        $.span '.label.label-danger', "必須"
       $.p @schema.note
       $.textarea '.form-control',
         disabled: @props.readonly
@@ -46,6 +50,8 @@ class MultiCheckInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
+      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
+        $.span '.label.label-danger', "必須"
       $.p @schema.note
       for choice in @schema.choices
         $.div '.checkbox', ->
@@ -62,6 +68,8 @@ class RadioInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
+      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
+        $.span '.label.label-danger', "必須"
       $.p @schema.note
       for choice in @schema.choices
         $.div '.radio', ->
@@ -78,6 +86,8 @@ class SelectInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
+      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
+        $.span '.label.label-danger', "必須"
       $.p @schema.note
       $.select '.form-control',
         name: @schema.nestedName
@@ -92,6 +102,8 @@ class NumberInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
+      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
+        $.span '.label.label-danger', "必須"
       $.p @schema.note
       $.input '.form-control',
         disabled: @props.readonly

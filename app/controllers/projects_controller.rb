@@ -9,11 +9,10 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @api_body = {
-      payload: params['payload'],
-      name: params['payload']['project_name'],
-    }
-    api_call
     @does_not_have_sidebar = true
+    @api_body = params.slice('payload')
+    api_call
+    validities = @response_json['validities']
+    render :new unless validities.nil?
   end
 end

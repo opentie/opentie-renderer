@@ -14,7 +14,7 @@ form method="POST"
   input type="hidden" name="_method" value="PUT"
   input type="hidden" name="refuse" value="1"
 
-- if tie_request['status'] == 0
+- if tie_request && tie_request['status'] == 0
   = insert_formalizr 'formalizr',
       readonly: true,
       schema: tie_request_schema['payload'],

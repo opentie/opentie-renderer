@@ -34,7 +34,7 @@ module ApplicationHelper
   FIELDS = [
     'division', 'project', 'request', 'request_schema',
     'project_history', 'project_comment', 'my_request_schema',
-    'account_schema', 'project_schema'
+    'account_schema', 'validity', 'project_schema'
   ]
 
   (FIELDS + FIELDS.map(&:pluralize)).each do |field|
@@ -56,7 +56,10 @@ module ApplicationHelper
 
   def insert_formalizr(prefix, opts)
     content_tag(:div, '', id: 'form-wrapper') do
-      json = opts.merge({ prefix: prefix }).to_json
+      json = opts.merge({
+        prefix: prefix,
+        validities: tie_validities
+      }).to_json
       content_tag(:script, json, type: 'application/json')
     end
   end

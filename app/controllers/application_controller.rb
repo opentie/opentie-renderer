@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     path += "?#{@api_query}" unless @api_query.nil?
     response = api_client.run(@api_method, path, @api_body)
     case response.status
-    when 200...300
+    when 200...300, 400
       @response_json = response.body
     when 301..303
       redirect_to response.headers['x-location']

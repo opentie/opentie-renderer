@@ -16,7 +16,7 @@ class ApiClient
     begin
       response = @conn.run_request(method, "/api/v1#{path}", body, headers)
       case response.status
-      when 200, 201, 301..303
+      when 200..303, 400
         response
       when 401
         raise Unauthorized

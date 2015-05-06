@@ -1,3 +1,19 @@
 - set_title tie_project['name']
 
 h1 = tie_project['name']
+
+table.table.table-striped
+  thead
+    tr
+      th 項目
+      th 内容
+  tbody
+    - tie_project_schema['value'].each do |field_schema|
+      tr
+        th.col-xs-2 = field_schema['title']
+        - if ['radio', 'select', 'multicheck'].include?(field_schema['type'])
+          - value = tie_project['payload'][field_schema['name']]
+          - choices = field_schema['choices'].map{|kv| [kv['value'], kv['label']]}.to_h
+          td = choices[value] || value
+        - else
+          td = tie_project['payload'][field_schema['name']]

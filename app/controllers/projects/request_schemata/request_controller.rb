@@ -15,6 +15,10 @@ class Projects::RequestSchemata::RequestController < ApplicationController
     end
 
     api_call
+
+    validities = @response_json['validities']
+    return render :edit unless validities.nil?
+
     redirect_to request.path_info
   end
 end

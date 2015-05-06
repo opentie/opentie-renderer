@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 
     resources :invitations,
       controller: 'projects/invitations',
-      only: [:new, :index]
+      only: [:new, :index, :create]
   end
 
   resources :divisions,

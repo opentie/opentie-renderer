@@ -201,7 +201,7 @@ class TableInput extends Input
       when 'select'     then TableSelectInput
 
   template: cfx ($, _) ->
-    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+    $.div '.form-group', ->
       $.label '.control-label', @schema.title
       $.p @schema.note
       $.dl '.dl-horizontal', ->

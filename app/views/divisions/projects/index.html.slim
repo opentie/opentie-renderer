@@ -12,4 +12,4 @@ table.table.table-striped
   - tie_projects.each do |project|
     tr
       td = project['number']
-      td = project['name']
+      td = link_to project['name'], path_to(tie_division, project)

@@ -1,0 +1,2 @@
+module Projects::InvitationsHelper
+end

@@ -29,7 +29,8 @@ form method="POST"
 
 - if tie_request && tie_request['status'] == 0
   h2 申請内容
-  = insert_formalizr 'formalizr',
-      readonly: true,
-      schema: tie_request_schema['payload'],
-      value: (tie_request.try(:[], 'payload') || {})
+  form
+    = insert_formalizr 'formalizr',
+        readonly: true,
+        schema: tie_request_schema['payload'],
+        value: (tie_request.try(:[], 'payload') || {})

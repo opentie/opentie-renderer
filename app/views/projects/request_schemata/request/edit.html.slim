@@ -5,7 +5,7 @@ form method="POST" action="#{path_to(tie_project, tie_request_schema, :request)}
   = hidden_field_tag(:authenticity_token, form_authenticity_token)
   = insert_formalizr 'formalizr',
       schema: tie_request_schema['payload'],
-      value: (tie_request.try(:[], 'payload') || {})
+      value: tie_request.try(:[], 'payload') || {}
   hr
   div.text-right
-    button.btn.btn-primary.btn-lg 登録
+    button.btn.btn-primary.btn-lg 申請

@@ -178,8 +178,6 @@ a .glyphicon {
   }
 }
 
-
-
 /* form tweaks */
 form {
   /* Undo form expansion */
@@ -265,4 +263,9 @@ form {
       margin-left: .4em;
     }
   }
+}
+
+.message-invalid {
+  color: $state-danger-text;
+  font-weight: bold;
 }

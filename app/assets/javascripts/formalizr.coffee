@@ -15,13 +15,22 @@ class Input extends React.Component
   render: -> @template this
   isRequired: ->
     (@schema.validators || []).some (v) -> v.type == 'required'
+  getValidities: ->
+    @props.validities?.validities || (@schema.validators || []).map (v) ->
+      { validity: true, description: v.description }
+  isValid: -> @getValidities().every (v) -> v.validity
+  renderValidities: ($, _) ->
+    $.ul ->
+      for v in @getValidities()
+        $.li className: { 'message-invalid': !v.validity }, -> _ v.description
 
 class TextInput extends Input
   template: cfx ($, _) ->
-    $.div '.form-group', ->
-      $.label @schema.title
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
       $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
+      @renderValidities($, _)
       $.input '.form-control',
         disabled: @props.readonly
         type: 'text'
@@ -31,10 +40,11 @@ class TextInput extends Input
 
 class ParagraphInput extends Input
   template: cfx ($, _) ->
-    $.div '.form-group', ->
-      $.label @schema.title
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
       $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
+      @renderValidities($, _)
       $.textarea '.form-control',
         disabled: @props.readonly
         rows: (@schema.rows or 3)
@@ -48,10 +58,11 @@ class MultiCheckInput extends Input
     (@props.value || []).indexOf(value) isnt -1
 
   template: cfx ($, _) ->
-    $.div '.form-group', ->
-      $.label @schema.title
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
       $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
+      @renderValidities($, _)
       for choice in @schema.choices
         $.div '.checkbox', ->
           $.label ->
@@ -65,10 +76,11 @@ class MultiCheckInput extends Input
 
 class RadioInput extends Input
   template: cfx ($, _) ->
-    $.div '.form-group', ->
-      $.label @schema.title
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
       $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
+      @renderValidities($, _)
       for choice in @schema.choices
         $.div '.radio', ->
           $.label ->
@@ -82,10 +94,11 @@ class RadioInput extends Input
 
 class SelectInput extends Input
   template: cfx ($, _) ->
-    $.div '.form-group', ->
-      $.label @schema.title
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
       $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
+      @renderValidities($, _)
       $.select '.form-control',
         name: @schema.nestedName
         defaultValue: @props.value, ->
@@ -97,10 +110,11 @@ class SelectInput extends Input
 
 class NumberInput extends Input
   template: cfx ($, _) ->
-    $.div '.form-group', ->
-      $.label @schema.title
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
       $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
+      @renderValidities($, _)
       $.input '.form-control',
         disabled: @props.readonly
         type: 'number'
@@ -124,6 +138,7 @@ class Formalizr extends React.Component
 
   template: cfx ($, _) ->
     @props.prefix = @props.prefix || 'formalizr'
+    @props.validities = @props.validities || {}
     $.div '.fromalizr', ->
       for child, i in @props.schema
         nestedName = "#{@props.prefix}[#{child.name}]"
@@ -131,6 +146,7 @@ class Formalizr extends React.Component
           readonly: @props.readonly
           schema: Object.create(child, nestedName: { value: nestedName })
           value: @props.value[child.name]
+          validities: @props.validities[child.name] if @props.validities
 
   render: -> @template this
 
@@ -185,8 +201,8 @@ class TableInput extends Input
       when 'select'     then TableSelectInput
 
   template: cfx ($, _) ->
-    $.div '.form-group', ->
-      $.label @schema.title
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
       $.p @schema.note
       $.dl '.dl-horizontal', ->
         for column in @schema.columns

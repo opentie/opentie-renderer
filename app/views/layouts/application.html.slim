@@ -33,7 +33,7 @@ html
                   role="button"
                   aria-expanded="false"]
                   span.glyphicon.glyphicon-user aria-hidden="true"
-                    = (tie_division || tie_project)['name']
+                  | #{(tie_division || tie_project)['name']}
                   span.caret
                 ul.dropdown-menu role="menu"
                   - my_projects.each do |project|

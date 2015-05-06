@@ -3,7 +3,7 @@
   "scripts": {
     "bundle": "browserify -t coffeeify --extension=\".coffee\" app/assets/javascripts/index.js -o app/assets/javascripts/bundle.js",
     "watch-js": "watchify --delay 0 -t coffeeify --extension=\".coffee\" app/assets/javascripts/index.js -o app/assets/javascripts/bundle.js",
-    "start": "npm run watch-js & rails s"
+    "start": "npm run watch-js & bundle exec rails s"
   },
   "devDependencies": {
     "browserify": "^9.0.7",

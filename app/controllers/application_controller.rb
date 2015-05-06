@@ -12,6 +12,12 @@ class ApplicationController < ActionController::Base
     @is_login_page = true
     render 'errors/404'
   end
+
+  rescue_from ApiClient::Forbidden do
+    @does_not_have_sidebar = true
+    @is_login_page = true
+    render 'errors/403'
+  end
   
   before_action :set_default_request
 

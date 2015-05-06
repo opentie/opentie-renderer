@@ -20,6 +20,8 @@ class ApiClient
         response
       when 401
         raise Unauthorized
+      when 403
+        raise Forbidden
       when 404
         raise NotFound
       else
@@ -50,4 +52,5 @@ class ApiClient
   class Unauthorized < StandardError ; end
   class Forbidden < StandardError ; end
   class NotFound < StandardError ; end
+  class Forbidden < StandardError ; end
 end

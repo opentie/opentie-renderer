@@ -2,6 +2,21 @@
 
 h1 = tie_project['name']
 
+- if tie_following_member == 0
+  .bs-callout.bs-callout-danger
+    h4 副責任者が必要です
+    | 副責任者を招待してください
+    p
+      = link_to "副責任者を招待する", path_to(tie_project, :invitations, :new), class: 'btn btn-primary'
+
+- if tie_following_member == 1
+  .bs-callout.bs-callout-warning
+    h4 副責任者の承認が必要です
+    | 招待した副責任者に確認して下さい。
+    | あるいは新たに副責任者を招待し直すこともできます。
+    p
+      = link_to "副責任者を招待する", path_to(tie_project, :invitations, :new), class: 'btn btn-primary'
+
 table.table.table-striped
   thead
     tr

@@ -1,3 +1,5 @@
+- set_title "#{tie_request_schema['name']} - #{tie_project['name']}"
+
 h1 = tie_request_schema['name']
 
 - if tie_request.nil?
@@ -6,15 +8,27 @@ h1 = tie_request_schema['name']
     | 申請あるいは辞退してください
 
 form method="POST"
-  .btn-group
-    button.btn.btn-warning 辞退
-    = link_to "申請", path_to(tie_project, tie_request_schema, :request, :edit),
-        class: 'btn btn-primary'
+  p.btn-group
+    - if tie_request && tie_request['status'] == 1
+      button.btn.btn-warning.btn-lg disabled="disabled"
+        span.glyphicon.glyphicon-ok
+        | 辞退済み
+    - else
+      button.btn.btn-warning.btn-lg 辞退
+    - if tie_request && tie_request['status'] == 0
+      = link_to path_to(tie_project, tie_request_schema, :request, :edit),
+          class: 'btn btn-success btn-lg' do
+            span.glyphicon.glyphicon-ok
+            | 再申請
+    - else
+      = link_to "申請", path_to(tie_project, tie_request_schema, :request, :edit),
+          class: 'btn btn-primary btn-lg'
   input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
   input type="hidden" name="_method" value="PUT"
   input type="hidden" name="refuse" value="1"
 
 - if tie_request && tie_request['status'] == 0
+  h2 申請内容
   = insert_formalizr 'formalizr',
       readonly: true,
       schema: tie_request_schema['payload'],

@@ -131,9 +131,7 @@ body,
     background-color: $navbar-default-bg;
 
     overflow: auto;
-}
 
-#sidebar {
     .nav-pills > li {
         & > a {
             border-radius: 0;
@@ -148,11 +146,23 @@ body,
         margin: 10px -15px 0 -15px;
         padding: 5px 10px;
         background-color: $gray-lighter;
+
+        &:first-child {
+            margin-top: 0;
+        }
     }
 }
 
 a .glyphicon {
   margin-right: .3em;
+}
+
+.btn > .glyphicon:first-child {
+  margin-right: .3em;
+}
+
+.btn > .glyphicon.glyphicon-only {
+  margin-right: 0;
 }
 
 .glyphicon:before {
@@ -167,6 +177,7 @@ a .glyphicon {
     left: -2px;
   }
 }
+
 
 
 /* form tweaks */

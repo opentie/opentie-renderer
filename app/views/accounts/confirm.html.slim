@@ -1,8 +1,17 @@
+- set_title "本登録が完了しました"
+
 #login.container
   h1 本登録が完了しました
 
   p
-    | 引き続き、企画の登録を行ってください。
+    | 引き続き、企画の登録を行うことができます。
 
-  p
-    = link_to "企画の登録を行う", path_to(:projects, :new)
+  .form-inline
+    .form-group
+      = link_to path_to(:projects, :new), class: "btn btn-primary"
+        span.glyphicon.glyphicon-plus
+        | 企画の登録を行う
+    .form-group
+      = link_to path_to(:dashboard), class: "btn btn-default"
+        span.glyphicon.glyphicon-dashboard
+        | ダッシュボードへ

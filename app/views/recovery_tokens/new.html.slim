@@ -1,0 +1,18 @@
+- set_title "ログインできないとき"
+
+#login.container
+  h1 ログインできないとき
+
+  h3 パスワードがわからない
+  p 以下のフォームから登録に使用したメールアドレスを送信してください。
+  .row
+    .col-sm-6
+      form.form-inline method="POST"
+        input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
+        .form-group
+          input#email-address.form-control type="email" name="email" placeholder="メールアドレス"
+        .form-group
+          button.btn.btn-primary type='submit' 送信
+
+  h3 アカウント名、またはアカウント名とパスワードの両方がわからない
+  p 学園祭実行委員会室までお越しいただき、その旨をお伝え下さい。

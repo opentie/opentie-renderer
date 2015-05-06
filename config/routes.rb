@@ -12,11 +12,17 @@ Rails.application.routes.draw do
   get :logout, controller: 'sessions', action: :edit
   post :logout, controller: 'sessions', action: :destroy
 
+  # reset password
+  get :recovery_tokens, controller: 'recovery_tokens', action: :new
+  post :recovery_tokens, controller: 'recovery_tokens', action: :create
+  get :reset_password, controller: 'recovery_tokens', action: :edit
+  post :reset_password, controller: 'recovery_tokens', action: :reset
+
   get :register, controller: 'accounts', action: :new
   post :register, controller: 'accounts', action: :create
 
   get 'register/confirm', controller: 'accounts', action: :confirm
-  
+
   resources :projects,
     only: [:show, :edit, :new, :create] do
 

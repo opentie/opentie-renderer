@@ -220,14 +220,14 @@ class TableInput extends Input
                   $.button '.btn.btn-danger',
                     type: 'button',
                     onClick: @removeRow.bind(this, i), ->
-                      $.span '.glyphicon.glyphicon-remove', ariaHidden: true
+                      $.span '.glyphicon.glyphicon-remove.glyphicon-only', ariaHidden: true
           unless @props.readonly
             $.tr key: 'footer', ->
               $.td '.text-center', colSpan: @schema.columns.length+2, ->
                 $.button '.btn.btn-success',
                   type: 'button',
                   onClick: @addRow.bind(this), ->
-                    $.span '.glyphicon.glyphicon-plus', ariaHidden: true
+                    $.span '.glyphicon.glyphicon-plus.glyphicon-only', ariaHidden: true
 
   handleChange: (i, name, event) ->
     @state.value[i][name] = event.target.value

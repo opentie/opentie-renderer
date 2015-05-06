@@ -7,9 +7,9 @@ form
 
 table.table.table-striped
   tr
-    th 企画番号
+    th.col-xs-1.text-right 企画番号
     th 企画名
   - tie_projects.each do |project|
     tr
-      td = project['number']
+      th.text-right = project['number']
       td = link_to project['name'], path_to(tie_division, project)

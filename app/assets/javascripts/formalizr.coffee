@@ -122,6 +122,20 @@ class NumberInput extends Input
         defaultValue: @props.value
         placeholder: @schema.placeholder
 
+class PasswordInput extends Input
+  template: cfx ($, _) ->
+    $.div '.form-group', className: { 'has-error': !@isValid() }, ->
+      $.label '.control-label', @schema.title
+      $.span '.label.label-danger', "必須" if @isRequired()
+      $.p @schema.note
+      @renderValidities($, _)
+      $.input '.form-control',
+        disabled: @props.readonly
+        type: 'password'
+        name: @schema.nestedName
+        defaultValue: @props.value
+        placeholder: @schema.placeholder
+
 class Formalizr extends React.Component
   constructor: (props) ->
     super props
@@ -130,6 +144,7 @@ class Formalizr extends React.Component
     switch input.type
       when 'text'       then TextInput
       when 'number'     then NumberInput
+      when 'password'   then PasswordInput
       when 'multicheck' then MultiCheckInput
       when 'radio'      then RadioInput
       when 'select'     then SelectInput

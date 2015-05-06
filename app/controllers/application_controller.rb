@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
     redirect_to controller: '/sessions', action: :new, redirect_to: request.url
   end
 
+  rescue_from ApiClient::NotFound do
+    @does_not_have_sidebar = true
+    @is_login_page = true
+    render 'errors/404'
+  end
+  
   before_action :set_default_request
 
   def api_client

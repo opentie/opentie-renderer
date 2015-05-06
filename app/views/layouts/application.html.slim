@@ -24,7 +24,8 @@ html
             - if tie_division || tie_project
               li
                 = link_to "/" do
-                  span.glyphicon.glyphicon-dashboard aria-hidden="true" ダッシュボード
+                  span.glyphicon.glyphicon-dashboard aria-hidden="true"
+                  | ダッシュボード
               li.dropdown
                 a.dropdown-toggle[
                   href="#"
@@ -45,7 +46,8 @@ html
                       = link_to division['name'], division_path(division['id'])
             li
               a href="/logout"
-                span.glyphicon.glyphicon-log-out aria-hidden="true" ログアウト
+                span.glyphicon.glyphicon-log-out aria-hidden="true"
+                | ログアウト
     - if @does_not_have_sidebar
       = yield
     - else

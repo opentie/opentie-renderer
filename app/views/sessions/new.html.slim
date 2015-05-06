@@ -1,19 +1,27 @@
 #login.container
   - set_title 'ログイン'
 
-  .col-sm-8.col-sm-offset-2
-    h1 ログイン
-    - if @invalid_email_or_password
-      .bs-callout.bs-callout-danger
-        h4 ログイン失敗
-        | メールアドレスまたはパスワードが不正です
-    form method="POST"
-      input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
-      .form-group
-        label for="email-address" メールアドレス
-        input#email-address.form-control type="email" name="email"
-      .form-group
-        label for="password" パスワード
-        input#password.form-control type="password" name="password"
-      .text-right
-        button.btn.btn-primary type="submit" ログイン
+  .row
+    .col-sm-8.col-sm-offset-2
+      h1 ログイン
+      - if @invalid_email_or_password
+        .bs-callout.bs-callout-danger
+          h4 ログイン失敗
+          | メールアドレスまたはパスワードが不正です
+      form method="POST"
+        input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
+        .form-group
+          label for="email-address" メールアドレス
+          input#email-address.form-control type="email" name="email"
+        .form-group
+          label for="password" パスワード
+          input#password.form-control type="password" name="password"
+        .text-right
+          button.btn.btn-primary type="submit" ログイン
+  .row
+    .col-sm-8.col-sm-offset-2
+      hr
+      .text-center
+        = link_to path_to(:register), class: "btn btn-lg btn-success" do
+          span.glyphicon.glyphicon-plus-sign aria-hidden='true'
+          | 新規登録

@@ -13,13 +13,14 @@ class Input extends React.Component
     super props
     @schema = @props.schema
   render: -> @template this
+  isRequired: ->
+    (@schema.validators || []).some (v) -> v.type == 'required'
 
 class TextInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
-      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
-        $.span '.label.label-danger', "必須"
+      $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
       $.input '.form-control',
         disabled: @props.readonly
@@ -32,8 +33,7 @@ class ParagraphInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
-      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
-        $.span '.label.label-danger', "必須"
+      $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
       $.textarea '.form-control',
         disabled: @props.readonly
@@ -50,8 +50,7 @@ class MultiCheckInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
-      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
-        $.span '.label.label-danger', "必須"
+      $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
       for choice in @schema.choices
         $.div '.checkbox', ->
@@ -68,8 +67,7 @@ class RadioInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
-      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
-        $.span '.label.label-danger', "必須"
+      $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
       for choice in @schema.choices
         $.div '.radio', ->
@@ -86,8 +84,7 @@ class SelectInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
-      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
-        $.span '.label.label-danger', "必須"
+      $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
       $.select '.form-control',
         name: @schema.nestedName
@@ -102,8 +99,7 @@ class NumberInput extends Input
   template: cfx ($, _) ->
     $.div '.form-group', ->
       $.label @schema.title
-      if ((@schema.validations || []).some (v) -> (v["type"] == "required"))
-        $.span '.label.label-danger', "必須"
+      $.span '.label.label-danger', "必須" if @isRequired()
       $.p @schema.note
       $.input '.form-control',
         disabled: @props.readonly

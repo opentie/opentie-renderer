@@ -7,6 +7,6 @@ nav#sidebar.container-fluid
   h5 各種申請
   .row
     ul.nav.nav-pills.nav-stacked
-      - tie_my_request_schemata.each do |schema|
+      - tie_request_schemata.each do |schema|
         li
           = link_to schema['name'], path_to(tie_project, schema, 'request')

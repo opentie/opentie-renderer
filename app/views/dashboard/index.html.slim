@@ -14,10 +14,6 @@
             li.list-group-item
               -# span.badge 14
               = link_to project['name'], path_to(project)
-        .panel-body.text-center
-          a.btn.btn-primary href="/projects/new"
-            span.glyphicon.glyphicon-plus
-            |新しい企画を登録する
     - else
       .text-center
         a.btn.btn-primary href="/projects/new"

@@ -14,6 +14,9 @@ class AccountsController < ApplicationController
       :password, :password_confirmation
     )
     api_call
+
+    validities = @response_json['validities']
+    return render :new unless validities.nil?
   end
 
   def confirm

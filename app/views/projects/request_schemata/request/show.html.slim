@@ -2,20 +2,30 @@
 
 h1 = tie_request_schema['name']
 
-- if tie_request.nil?
-  .bs-callout.bs-callout-danger
-    h4 未申請
-    | 申請あるいは辞退してください
+- if tie_request['status'] == -1
+  - if tie_request['is_required']
+    .bs-callout.bs-callout-danger
+      h4 未申請
+      | 必ず期日までに申請をしてください
+  - else
+    .bs-callout.bs-callout-danger
+      h4 未申請
+      | 必ず期日までに辞退あるいは申請をしてください
+
+dl.dl-horizontal
+  dt 期日
+  dd = DateTime.iso8601(tie_request_schema['deadline_at']).strftime("%Y年 %m月 %d日 %H:%M")
 
 form method="POST"
   p.btn-group
-    - if tie_request && tie_request['status'] == 1
-      button.btn.btn-warning.btn-lg disabled="disabled"
-        span.glyphicon.glyphicon-ok
-        | 辞退済み
-    - else
-      button.btn.btn-warning.btn-lg 辞退
-    - if tie_request && tie_request['status'] == 0
+    - unless tie_request['is_required']
+      - if tie_request && tie_request['status'] == 1
+        button.btn.btn-warning.btn-lg disabled="disabled"
+          span.glyphicon.glyphicon-ok
+          | 辞退済み
+      - else
+        button.btn.btn-warning.btn-lg 辞退
+    - if tie_request['status'] == 0
       = link_to path_to(tie_project, tie_request_schema, :request, :edit),
           class: 'btn btn-success btn-lg' do
             span.glyphicon.glyphicon-ok

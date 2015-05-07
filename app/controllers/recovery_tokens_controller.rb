@@ -35,10 +35,15 @@ class RecoveryTokensController < ApplicationController
     }
     @api_path = "/recovery_tokens/#{params[:token]}"
     api_call
-  rescue => e
+  rescue ApiClient::Unauthorized
     @is_login_page = true
     @does_not_have_sidebar = true
     @invalid_password = true
+    render :edit
+  rescue # ApiClient::NotFound
+    @is_login_page = true
+    @does_not_have_sidebar = true
+    @invalid_token = true
     render :edit
   end
 end

@@ -10,6 +10,9 @@
         - if @invalid_password
           .alert.alert-danger
             | パスワードが不正です
+        - if @invalid_token
+          .alert.alert-danger
+            | トークンが不正です。パスワードをリセットしたい場合は、もう一度メールを#{link_to 'こちら', path_to(:recovery_tokens)}から送信してください
         input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
         .form-group
           input#email-address.form-control type="password" name="password" placeholder="新しいパスワード"

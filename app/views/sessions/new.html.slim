@@ -22,6 +22,11 @@
     .col-sm-8.col-sm-offset-2
       hr
       .text-center
-        = link_to path_to(:register), class: "btn btn-lg btn-success" do
-          span.glyphicon.glyphicon-plus-sign aria-hidden='true'
-          | アカウントを作成
+        p
+          = link_to path_to(:register), class: "btn btn-lg btn-success" do
+            span.glyphicon.glyphicon-plus-sign aria-hidden='true'
+            | アカウントを作成
+        p
+          = link_to path_to(:recovery_tokens), class: "btn btn-default" do
+            span.glyphicon.glyphicon-question-sign
+            | ログインできないとき

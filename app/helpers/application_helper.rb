@@ -35,7 +35,7 @@ module ApplicationHelper
     'division', 'project', 'request', 'request_schema',
     'project_history', 'project_comment', 'my_request_schema',
     'account_schema', 'validity', 'project_schema', 'following_member',
-    'account'
+    'account', 'my_requests'
   ]
 
   (FIELDS + FIELDS.map(&:pluralize)).each do |field|

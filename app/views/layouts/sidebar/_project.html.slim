@@ -7,6 +7,16 @@ nav#sidebar.container-fluid
   h5 各種申請
   .row
     ul.nav.nav-pills.nav-stacked
-      - tie_request_schemata.each do |schema|
+      - tie_my_requests.each do |request|
+        - schema = request['request_schema']
         li
-          = link_to schema['name'], path_to(tie_project, schema, 'request')
+          = link_to path_to(tie_project, schema, 'request') do
+            = schema['name']
+            - if request['is_required']
+              span.label.label-default 必須
+            - if request['status'] == -1
+              span.label.label-danger 未申請
+            - if request['status'] == 0
+              span.label.label-success 申請済
+            - if request['status'] == 1
+              span.label.label-warning 辞退済

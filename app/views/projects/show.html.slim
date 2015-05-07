@@ -6,7 +6,7 @@ h1 = tie_project['name']
   .bs-callout.bs-callout-danger
     h4 副責任者が必要です
     | 副責任者を招待してください
-    p
+    p.form-group
       = link_to "副責任者を招待する", path_to(tie_project, :invitations, :new), class: 'btn btn-primary'
 
 - if tie_following_member == 1
@@ -16,6 +16,14 @@ h1 = tie_project['name']
     | あるいは新たに副責任者を招待し直すこともできます。
     p
       = link_to "副責任者を招待する", path_to(tie_project, :invitations, :new), class: 'btn btn-primary'
+
+- not_yet = tie_my_requests.select{ |request| request['status'] == -1 }
+- if not_yet.length > 0
+  .bs-callout.bs-callout-danger
+    h4 以下の申請を完了させてください
+    ul
+      - not_yet.each do |req|
+        li = link_to req['request_schema']['name'], path_to(tie_project, req['request_schema'], :request)
 
 table.table.table-striped
   thead

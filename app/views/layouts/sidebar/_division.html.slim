@@ -20,6 +20,6 @@ nav#sidebar.container-fluid
         = link_to '各種申請', path_to(tie_division, :request_schemata)
       li
         hr
-      - tie_my_request_schemata.each do |schema|
+      - tie_request_schemata.each do |schema|
         li
           = link_to schema['name'], path_to(tie_division, schema, :requests)
